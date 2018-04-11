@@ -1,0 +1,19 @@
+---
+    - hosts: 172.21.0.16 
+      tasks:
+
+          - name: Install Nginx Package
+            apt: name=nginx state=present
+
+          - name: Copy Nginx.conf
+            template: src=/etc/nginx/nginx.conf dest=/home/nginx.conf
+                owner=root group=root mode=0644 validate='nginx -t -c %s'
+            notify:
+               - ReStart Nginx Service
+
+      handlers:
+          - name: ReStart Nginx Service
+            service: name=nginx state=restarted
+      
+
+
